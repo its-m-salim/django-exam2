@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% for f in fieds %}
+    <div>
+        <p>name {{f.name}}</p>
+        <p>price {{f.price}}</p>
+        <p>address {{f.address}}</p>
+        <p>category {{f.category.name}}</p>
+        <p>players_count {{f.category.players_count}}</p>
+        <p>caption {{f.description|default:"no caption"}}</p>
+        
+        {% if f.is_available %}
+        <p>status: free </p>
+        <a href="{% url 'field_book' f.id %}">book this field</a>
+        {% else %}
+        {% endif %}
+    </div>
+    {% empty %}
+    <h1>no fields yet.</h1>
+    {% endfor %}
+</body>
+</html>

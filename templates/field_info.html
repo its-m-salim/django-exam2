@@ -3,29 +3,50 @@
 {% block title %}{{ field.name }}{% endblock %}
 
 {% block content %}
+<section class="container page">
+    <div class="page-head">
+        <div>
+            <h1 class="page-title">{{ field.name }}</h1>
+            <p class="page-sub">{{ field.address }}</p>
+        </div>
+        {% if field.is_available %}
+            <span class="badge badge-free">Свободно</span>
+        {% else %}
+            <span class="badge badge-busy">Занято</span>
+        {% endif %}
+    </div>
 
-<h1>{{ field.name }}</h1>
+    <div class="detail">
+        <div>
+            {% if field.image %}
+                <img class="detail-img" src="{{ field.image.url }}" alt="Фото поля {{ field.name }}">
+            {% else %}
+                <div class="detail-img-empty">Нет фото</div>
+            {% endif %}
 
-{% if field.image %}
-    <img src="{{ field.image.url }}" alt="Фото поля {{ field.name }}">
+            {% if field.description %}
+                <p class="description">{{ field.description }}</p>
+            {% endif %}
+        </div>
 
-{% endif %}
+        <aside class="panel">
+            <dl class="info-list">
+                <div class="info-row"><dt>Формат</dt><dd>{{ field.category.name }}</dd></div>
+                <div class="info-row"><dt>Игроков в команде</dt><dd>{{ field.category.players_count }}</dd></div>
+                <div class="info-row"><dt>Адрес</dt><dd>{{ field.address }}</dd></div>
+                <div class="info-row"><dt>Цена за игру</dt><dd class="price">{{ field.price }}</dd></div>
+            </dl>
 
+            {% if field.is_available %}
+                <a class="btn btn-primary btn-block" href="{% url 'field_book' field.id %}">Заказать поле</a>
+            {% else %}
+                <p class="page-sub">Поле сейчас занято. Загляните позже или выберите другое.</p>
+            {% endif %}
 
-<p>adres: {{ field.address }}</p>
-<p>ct: {{ field.category.name }}</p>
-<p>playesr {{ field.category.players_count }}</p>
-<p>price: {{ field.price }}</p>
-<p>caption: {{ field.description }}</p>
-
-{% if field.is_available %}
-
-    <p>status free</p>
-    <a href="{% url 'field_book' field.id %}">book this field</a>
-
-{% else %}
-    <p>booked</p>
-{% endif %}
-
-<a href="{% url 'fields' %}">back</a>
+            <div class="actions">
+                <a class="btn btn-outline btn-sm" href="{% url 'fields' %}">Назад в каталог</a>
+            </div>
+        </aside>
+    </div>
+</section>
 {% endblock %}

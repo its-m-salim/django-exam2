@@ -3,45 +3,74 @@
 {% block title %}Играем вместе{% endblock %}
 
 {% block content %}
-<h1>Играем вместе</h1>
+<section class="container page">
+    <div class="page-head">
+        <div>
+            <h1 class="page-title">Играем вместе</h1>
+            <p class="page-sub">Заказы, где не хватает игроков. Вступайте и играйте.</p>
+        </div>
+    </div>
 
+    <div class="cards">
+        {% for booking in bookings %}
+            {% with joined=booking.participants.all|length %}
+            <article class="card together-card">
+                <div class="card-body">
+                    <h2 class="card-title">{{ booking.field.name }}</h2>
+                    <p class="card-text">{{ booking.field.address }}</p>
 
-{% for booking in bookings %}
+                    <p class="progress-text">Вступили: {{ joined }} из {{ booking.players_needed }}</p>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: {% widthratio joined booking.players_needed 100 %}%;"></div>
+                    </div>
 
-    <section>
-        <h2>{{ booking.field.name }}</h2>
-        <p>adres: {{ booking.field.address }}</p>
-        <p>owner: {{ booking.user.username }}</p>
-        <p> players_needed{{ booking.players_needed }}</p>
-        <h3>players</h3>
+                    <p class="participants-title">Уже в команде</p>
+                    <div class="people">
+                        {% for participant in booking.participants.all %}
+                            <div class="person">
+                                {% include 'includes/avatar.html' with person=participant.user size='sm' %}
+                                <span>{{ participant.user.username }}</span>
+                            </div>
+                        {% empty %}
+                            <span class="card-text">Пока никого</span>
+                        {% endfor %}
+                    </div>
 
+                    <div class="organizer person">
+                        {% include 'includes/avatar.html' with person=booking.user size='md' %}
+                        <div>
+                            <small>Организатор</small>
+                            <strong>{{ booking.user.username }}</strong>
+                        </div>
+                    </div>
 
-        {% for participant in booking.participants.all %}
-            <p>{{ participant.user.username }}</p>
+                    {% if booking.user_id != user.id %}
+                        <div class="card-foot">
+                            {% for participant in booking.participants.all %}
+                                {% if participant.user_id == user.id %}
+                                    <form class="inline-form" method="post" action="{% url 'leave_booking' booking.id %}">
+                                        {% csrf_token %}
+                                        <button class="btn btn-danger btn-sm" type="submit">Выйти из команды</button>
+                                    </form>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if joined < booking.players_needed %}
+                                <form class="inline-form" method="post" action="{% url 'join_booking' booking.id %}">
+                                    {% csrf_token %}
+                                    <button class="btn btn-primary btn-sm" type="submit">Вступить в команду</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </article>
+            {% endwith %}
         {% empty %}
-            <p>no players yet</p>
+            <div class="empty" style="grid-column: 1 / -1;">
+                Сейчас нет заказов, где ищут игроков.
+            </div>
         {% endfor %}
-
-        {% if booking.user_id != user.id %}
-            {% for participant in booking.participants.all %}
-                {% if participant.user_id == user.id %}
-                    <form method="post" action="{% url 'leave_booking' booking.id %}">
-                        {% csrf_token %}
-                        <button type="submit">Выйти из команды</button>
-                    </form>
-                {% endif %}
-            {% endfor %}
-
-            {% if booking.participants.count < booking.players_needed %}
-                <form method="post" action="{% url 'join_booking' booking.id %}">
-                {% csrf_token %}
-                <button type="submit">join team</button>
-            </form>
-            {% endif %}
-        {% endif %}
-    </section>
-    <hr>
-{% empty %}
-    <p>no active commands.</p>
-{% endfor %}
+    </div>
+</section>
 {% endblock %}

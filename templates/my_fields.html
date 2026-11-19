@@ -1,51 +1,68 @@
 {% extends 'base.html' %}
 
-{% block title %}Мои заказы{% endblock %}
+{% block title %}Мои поля{% endblock %}
 
 {% block content %}
+<section class="container page">
+    <div class="page-head">
+        <div>
+            <h1 class="page-title">Мои поля</h1>
+            <p class="page-sub">Активные заказы и история игр.</p>
+        </div>
+        <a class="btn btn-green btn-sm" href="{% url 'fields' %}">Заказать ещё поле</a>
+    </div>
 
+    <h2 class="block-title" style="margin-top: 8px;">Активные заказы</h2>
+    <div class="rows">
+        {% for booking in active %}
+            <article class="row-card">
+                <div>
+                    <h3>{{ booking.field.name }}</h3>
+                    <div class="row-meta">
+                        <span>{{ booking.field.address }}</span>
+                        <span>Заказано: {{ booking.created_at|date:"d.m.Y H:i" }}</span>
+                        <span>Команда: {% if booking.has_team %}есть{% else %}нет, не хватает игроков: {{ booking.players_needed}}{% endif %}</span>
+                    </div>
+                </div>
 
-<h1>my fiekds</h1>
-<h2>actives </h2>
-{% for booking in active %}
-    <section>
-        <h3>{{booking.field.name}}</h3>
-        <p>adrse: {{booking.field.address}}</p>
-        <p>date {{ booking.created_at }}</p>
-        <p>have tam {% if booking.has_team %}Да{% else %}Нет{% endif %}</p>
-        {% if not booking.has_team %}
-            <p>Не хватает игроков: {{ booking.players_needed }}</p>
-        {% endif %}
-        <p>Статус: {{ booking.get_status_display }}</p>
-        <a href="/bookings/{{ booking.id }}/">see details</a>
-        
-        <form method="post" action="{% url 'cancel_booking' booking.id %}">
-            {% csrf_token %}
-            <button type="submit">cancel </button>
-        </form>
+                <div class="row-actions">
+                    <a class="btn btn-outline btn-sm" href="{% url 'booking_info' booking.id %}">Посмотреть</a>
 
+                    <form class="inline-form" method="post" action="{% url 'finish_booking' booking.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-green btn-sm" type="submit">Завершить</button>
+                    </form>
+                    <form class="inline-form" method="post" action="{% url 'cancel_booking' booking.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-danger btn-sm" type="submit">Отменить</button>
+                    </form>
+                </div>
+            </article>
+        {% empty %}
+            <div class="empty">
+                Активных заказов нет. <a href="{% url 'fields' %}">Выберите поле в каталоге</a>.
+            </div>
+        {% endfor %}
+    </div>
 
-        <form method="post" action="{% url 'finish_booking' booking.id %}">
-            {% csrf_token %}
-            <button type="submit">finish</button>
-        
-        </form>
-    </section>
-    <hr>
-{% empty %}
-    <p>no fields yet.</p>
-{% endfor %}
-
-<h2>history</h2>
-{% for booking in history %}
-    <section>
-        <h3>{{ booking.field.name }}</h3>
-        <p>date{{ booking.created_at }}</p>
-        <p>status{{ booking.get_status_display }}</p>
-        <a href="/bookings/{{ booking.id }}/">see</a>
-    </section>
-    <hr>
-{% empty %}
-    <p>history</p>
-{% endfor %}
+    <h2 class="block-title">История</h2>
+    <div class="rows">
+        {% for booking in history %}
+            <article class="row-card">
+                <div>
+                    <h3>{{ booking.field.name }}</h3>
+                    <div class="row-meta">
+                        <span>Заказано: {{ booking.created_at|date:"d.m.Y H:i" }}</span>
+                    </div>
+                </div>
+                <div class="row-actions">
+                    <span class="badge badge-{{ booking.status }}">{{ booking.get_status_display }}</span>
+                    <a class="btn btn-outline btn-sm" href="{% url 'booking_info' booking.id %}">Посмотреть</a>
+                </div>
+            </article>
+        {% empty %}
+            <div class="empty">История пока пустая.</div>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}

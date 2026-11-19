@@ -1,0 +1,8 @@
+{# Круглый аватар. Использование: {% include 'includes/avatar.html' with person=user size='sm' %} #}
+{# size: sm (маленький), md (средний), lg (большой) #}
+{% if person.avatar %}
+    <img class="avatar avatar-{{ size }}" src="{{ person.avatar.url }}" alt="{{ person.username }}">
+{% else %}
+    {# Если фото нет — серый круг с первой буквой имени #}
+    <span class="avatar avatar-{{ size }}" aria-hidden="true">{{ person.username|first|upper }}</span>
+{% endif %}

@@ -1,0 +1,1101 @@
+/* =========================================================
+   Аренда футбольных полей — стили сайта
+   Оглавление:
+   1. Переменные и базовые стили
+   2. Шапка и меню
+   3. Аватар
+   4. Кнопки и значки
+   5. Лендинг (главная)
+   6. Внутренние страницы (каталог, поле, заказы)
+   7. Формы
+   8. Профиль
+   9. Подвал и сообщения
+   10. Телефоны и планшеты
+   ========================================================= */
+
+
+/* ===== 1. Переменные и базовые стили ===== */
+:root {
+    --pitch: #0d4a35;        /* тёмно-зелёный, цвет поля */
+    --pitch-dark: #082f22;
+    --grass: #1f8a5b;        /* светлее, для акцентов */
+    --chalk: #f3f6f4;        /* фон страниц */
+    --white: #ffffff;
+    --ink: #15211b;          /* основной текст */
+    --muted: #5d6d65;        /* второстепенный текст */
+    --line: #dce5e0;         /* границы */
+    --yellow: #f5c518;       /* жёлтая карточка — главный акцент */
+    --red: #d63c3c;
+    --gray: #c8cecb;         /* серый фон аватара без фото */
+    --radius: 14px;
+    --font: "Segoe UI", system-ui, -apple-system, Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--font);
+    color: var(--ink);
+    background: var(--chalk);
+    line-height: 1.55;
+}
+
+main {
+    flex: 1;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+a {
+    color: var(--grass);
+}
+
+h1, h2, h3 {
+    line-height: 1.15;
+}
+
+/* атрибут hidden всегда должен скрывать элемент */
+[hidden] {
+    display: none !important;
+}
+
+/* видимая рамка при навигации с клавиатуры */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid #1b6ef3;
+    outline-offset: 2px;
+}
+
+.container {
+    width: min(1120px, 100% - 32px);
+    margin-inline: auto;
+}
+
+
+/* ===== 2. Шапка и меню ===== */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--white);
+    border-bottom: 1px solid var(--line);
+}
+
+.header-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: 68px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: -0.01em;
+    color: var(--pitch);
+    text-decoration: none;
+}
+
+.logo-ball {
+    font-size: 1.5rem;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+}
+
+.nav a {
+    padding: 8px 14px;
+    border-radius: 999px;
+    color: var(--ink);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.nav a:hover {
+    background: var(--chalk);
+}
+
+/* текущая страница */
+.nav a.active {
+    background: var(--pitch);
+    color: var(--white);
+}
+
+.nav .nav-register {
+    background: var(--yellow);
+    color: var(--pitch-dark);
+    font-weight: 700;
+}
+
+.nav .nav-register:hover {
+    background: #e6b70c;
+}
+
+/* аватар + имя в правом углу шапки */
+.nav .nav-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 8px;
+    padding: 4px 14px 4px 4px;
+    border: 1px solid var(--line);
+}
+
+.nav .nav-profile.active {
+    border-color: var(--pitch);
+}
+
+
+/* ===== 3. Аватар ===== */
+/* Круглый аватар. Размеры: sm, md, lg */
+.avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    object-fit: cover;           /* фото обрезается по кругу без искажений */
+    background: var(--gray);     /* серый круг, если фото нет */
+    color: var(--white);
+    font-weight: 700;
+    box-shadow: 0 0 0 1px var(--line);
+}
+
+img.avatar {
+    display: block;
+}
+
+.avatar-sm { width: 36px;  height: 36px;  font-size: 15px; }
+.avatar-md { width: 48px;  height: 48px;  font-size: 19px; }
+.avatar-lg { width: 132px; height: 132px; font-size: 52px; }
+
+
+/* ===== 4. Кнопки и значки ===== */
+.btn {
+    display: inline-block;
+    padding: 11px 22px;
+    font: inherit;
+    font-weight: 600;
+    text-align: center;
+    text-decoration: none;
+    border: 2px solid transparent;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+
+.btn-sm {
+    padding: 7px 16px;
+    font-size: 0.92rem;
+}
+
+.btn-primary {
+    background: var(--yellow);
+    color: var(--pitch-dark);
+}
+.btn-primary:hover { background: #e6b70c; }
+
+.btn-green {
+    background: var(--pitch);
+    color: var(--white);
+}
+.btn-green:hover { background: var(--pitch-dark); }
+
+.btn-outline {
+    background: transparent;
+    color: var(--pitch);
+    border-color: var(--pitch);
+}
+.btn-outline:hover {
+    background: var(--pitch);
+    color: var(--white);
+}
+
+/* контурная кнопка на тёмном фоне */
+.btn-outline-light {
+    background: transparent;
+    color: var(--white);
+    border-color: rgba(255, 255, 255, 0.7);
+}
+.btn-outline-light:hover {
+    background: var(--white);
+    color: var(--pitch);
+}
+
+.btn-danger {
+    background: var(--white);
+    color: var(--red);
+    border-color: var(--red);
+}
+.btn-danger:hover {
+    background: var(--red);
+    color: var(--white);
+}
+
+.btn-block {
+    display: block;
+    width: 100%;
+}
+
+/* форма из одной кнопки (отмена, завершение, вступление) */
+.inline-form {
+    display: inline;
+    margin: 0;
+}
+
+/* значки статусов */
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 999px;
+    background: #e9eeeb;
+    color: var(--muted);
+}
+
+.badge-free      { background: #dff3e8; color: #14683f; }   /* поле свободно */
+.badge-busy      { background: #fde3e3; color: #a62a2a; }   /* поле занято */
+.badge-active    { background: #fff1b8; color: #6b5200; }   /* заказ активен */
+.badge-completed { background: #dff3e8; color: #14683f; }   /* заказ завершён */
+.badge-cancelled { background: #ececec; color: #666666; }   /* заказ отменён */
+
+.chip-info {
+    display: inline-block;
+    padding: 3px 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 8px;
+    background: var(--chalk);
+    border: 1px solid var(--line);
+    color: var(--pitch);
+}
+
+
+/* ===== 5. Лендинг (главная) ===== */
+.hero {
+    padding: 88px 0 96px;
+    color: var(--white);
+    background: var(--pitch) url("../img/pitch.svg") center / cover no-repeat;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 48px;
+    align-items: center;
+}
+
+.hero h1 {
+    margin: 0 0 20px;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 800;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+}
+
+.hero .lead {
+    max-width: 32em;
+    margin: 0 0 30px;
+    font-size: 1.15rem;
+    color: #d3e6dc;
+}
+
+.hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.formats {
+    display: grid;
+    gap: 12px;
+}
+
+.format {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 16px 22px;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.format strong {
+    min-width: 5.2em;
+    font-size: 1.7rem;
+    line-height: 1;
+    color: var(--yellow);
+}
+
+.format span {
+    color: #d3e6dc;
+}
+
+.section {
+    padding: 72px 0;
+}
+
+.section-white {
+    background: var(--white);
+}
+
+.section-title {
+    margin: 0 0 12px;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    letter-spacing: -0.01em;
+}
+
+.section-sub {
+    max-width: 40em;
+    margin: 0 0 40px;
+    color: var(--muted);
+}
+
+/* шаги — это реальная последовательность, поэтому с номерами */
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+}
+
+.step {
+    padding-top: 18px;
+    border-top: 3px solid var(--pitch);
+}
+
+.step-num {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--grass);
+}
+
+.step h3 {
+    margin: 0 0 8px;
+    font-size: 1.2rem;
+}
+
+.step p {
+    margin: 0;
+    color: var(--muted);
+}
+
+/* блок "Играем вместе" */
+.together {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+}
+
+.together p {
+    color: var(--muted);
+}
+
+.team-demo {
+    padding: 28px;
+    border-radius: var(--radius);
+    background: var(--white);
+    border: 1px solid var(--line);
+}
+
+.team-demo h3 {
+    margin: 0 0 4px;
+}
+
+.team-demo p {
+    margin: 0 0 20px;
+}
+
+.team-slots {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+/* пустое место в команде — пунктирный круг */
+.slot-empty {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px dashed var(--gray);
+}
+
+.features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 32px 48px;
+}
+
+.feature {
+    padding-left: 18px;
+    border-left: 3px solid var(--yellow);
+}
+
+.feature h3 {
+    margin: 0 0 6px;
+    font-size: 1.1rem;
+}
+
+.feature p {
+    margin: 0;
+    color: var(--muted);
+}
+
+.cta-band {
+    padding: 72px 0;
+    text-align: center;
+    color: var(--white);
+    background: var(--pitch-dark) url("../img/pitch.svg") center / cover no-repeat;
+}
+
+.cta-band h2 {
+    margin: 0 0 12px;
+    font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+}
+
+.cta-band p {
+    margin: 0 0 28px;
+    color: #d3e6dc;
+}
+
+.cta-band .hero-actions {
+    justify-content: center;
+}
+
+
+/* ===== 6. Внутренние страницы ===== */
+.page {
+    padding: 40px 0 64px;
+}
+
+.page-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.page-title {
+    margin: 0;
+    font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+    letter-spacing: -0.01em;
+}
+
+.page-sub {
+    margin: 6px 0 0;
+    color: var(--muted);
+}
+
+.block-title {
+    margin: 40px 0 16px;
+    font-size: 1.4rem;
+}
+
+.empty {
+    padding: 36px 20px;
+    text-align: center;
+    color: var(--muted);
+    background: var(--white);
+    border: 1px dashed var(--gray);
+    border-radius: var(--radius);
+}
+
+/* панель фильтров в каталоге */
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding: 16px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.filters input[type="text"] {
+    flex: 1 1 240px;
+    width: auto;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* чекбокс-кнопка: сам чекбокс скрыт, виден span */
+.chip {
+    position: relative;
+}
+
+.chip input {
+    position: absolute;
+    opacity: 0;
+}
+
+.chip span {
+    display: inline-block;
+    padding: 8px 16px;
+    border: 1px solid #c5d0ca;
+    border-radius: 999px;
+    cursor: pointer;
+    background: var(--white);
+}
+
+.chip input:checked + span {
+    background: var(--pitch);
+    border-color: var(--pitch);
+    color: var(--white);
+}
+
+.chip input:focus-visible + span {
+    outline: 3px solid #1b6ef3;
+    outline-offset: 2px;
+}
+
+/* карточки полей */
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 24px;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.card-media {
+    position: relative;
+}
+
+.card-img,
+.card-img-empty {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
+
+/* заглушка, если у поля нет фото */
+.card-img-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.85);
+    background: var(--grass) url("../img/pitch.svg") center / cover no-repeat;
+}
+
+.card-media .badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 8px;
+    padding: 18px;
+}
+
+.card-title {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.card-title a {
+    color: var(--ink);
+    text-decoration: none;
+}
+
+.card-title a:hover {
+    color: var(--grass);
+}
+
+.card-text {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+
+.card-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: auto;
+    padding-top: 12px;
+}
+
+.price {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--pitch);
+}
+
+.price small {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+}
+
+/* страница поля и страница заказа */
+.detail {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 32px;
+    align-items: start;
+}
+
+.detail-img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius);
+}
+
+.detail-img-empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius);
+    color: rgba(255, 255, 255, 0.85);
+    background: var(--grass) url("../img/pitch.svg") center / cover no-repeat;
+}
+
+.panel {
+    padding: 24px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.panel h2 {
+    margin: 0 0 12px;
+    font-size: 1.3rem;
+}
+
+.info-list {
+    margin: 0 0 20px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 11px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.info-row dt {
+    color: var(--muted);
+}
+
+.info-row dd {
+    margin: 0;
+    font-weight: 600;
+    text-align: right;
+}
+
+.description {
+    margin: 24px 0 0;
+    color: var(--muted);
+    white-space: pre-line;
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* списки людей */
+.people {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.person {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* строки заказов в "Мои поля" */
+.rows {
+    display: grid;
+    gap: 14px;
+}
+
+.row-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 22px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.row-card h3 {
+    margin: 0 0 4px;
+    font-size: 1.15rem;
+}
+
+.row-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    font-size: 0.92rem;
+    color: var(--muted);
+}
+
+.row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* карточки "Играем вместе" */
+.together-card .organizer {
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+}
+
+.organizer small {
+    display: block;
+    color: var(--muted);
+    font-size: 0.8rem;
+}
+
+.progress {
+    height: 8px;
+    overflow: hidden;
+    background: #e3e9e6;
+    border-radius: 999px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--grass);
+}
+
+.progress-text {
+    margin: 0;
+    font-size: 0.92rem;
+    font-weight: 600;
+}
+
+.participants-title {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+
+/* ===== 7. Формы ===== */
+label {
+    font-weight: 600;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="file"],
+select,
+textarea {
+    width: 100%;
+    padding: 11px 14px;
+    font: inherit;
+    color: var(--ink);
+    background: var(--white);
+    border: 1px solid #c5d0ca;
+    border-radius: 10px;
+}
+
+textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-card {
+    width: min(460px, 100%);
+    margin: 0 auto;
+    padding: 32px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.form-card h1 {
+    margin: 0 0 6px;
+    font-size: 1.8rem;
+}
+
+.form-card .form-sub {
+    margin: 0 0 24px;
+    color: var(--muted);
+}
+
+.form-wide {
+    width: min(560px, 100%);
+}
+
+.auth {
+    padding: 56px 0 72px;
+}
+
+.form-field {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.form-hint {
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--muted);
+}
+
+.form-footer {
+    margin: 20px 0 0;
+    text-align: center;
+    color: var(--muted);
+}
+
+/* переключатель Да / Нет */
+.choice {
+    display: flex;
+    gap: 10px;
+}
+
+.choice label {
+    position: relative;
+    flex: 1;
+    font-weight: 500;
+}
+
+.choice input {
+    position: absolute;
+    opacity: 0;
+}
+
+.choice span {
+    display: block;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    border: 1px solid #c5d0ca;
+    border-radius: 10px;
+    background: var(--white);
+}
+
+.choice input:checked + span {
+    background: var(--pitch);
+    border-color: var(--pitch);
+    color: var(--white);
+}
+
+.choice input:focus-visible + span {
+    outline: 3px solid #1b6ef3;
+    outline-offset: 2px;
+}
+
+.order-field {
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+}
+
+.order-field h2 {
+    margin: 0 0 4px;
+    font-size: 1.15rem;
+}
+
+.order-field p {
+    margin: 0;
+    color: var(--muted);
+}
+
+
+/* ===== 8. Профиль ===== */
+.profile {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 36px;
+    align-items: center;
+    padding: 36px;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+}
+
+.profile h1 {
+    margin: 0 0 4px;
+    font-size: 2rem;
+}
+
+.profile .profile-bio {
+    margin: 12px 0 0;
+    color: var(--muted);
+    white-space: pre-line;
+}
+
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 22px;
+}
+
+.stat {
+    padding: 12px 20px;
+    background: var(--chalk);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+}
+
+.stat strong {
+    display: block;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    color: var(--pitch);
+}
+
+.stat span {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+
+/* ===== 9. Подвал и сообщения ===== */
+.site-footer {
+    padding: 28px 0;
+    color: #b9d3c6;
+    background: var(--pitch-dark);
+}
+
+.footer-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.messages {
+    display: grid;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.message {
+    padding: 12px 18px;
+    background: #e3ece7;
+    border-radius: 10px;
+    border-left: 4px solid var(--grass);
+}
+
+.message-success { background: #dff3e8; border-color: #14683f; }
+.message-error   { background: #fde3e3; border-color: var(--red); }
+.message-warning { background: #fff4cc; border-color: var(--yellow); }
+
+
+/* ===== 10. Телефоны и планшеты ===== */
+@media (max-width: 860px) {
+    /* на телефоне шапка переносится на несколько строк */
+    .header-row {
+        flex-wrap: wrap;
+        height: auto;
+        padding: 10px 0;
+    }
+
+    .nav {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        margin: 0;
+    }
+
+    .hero {
+        padding: 56px 0 64px;
+    }
+
+    .hero-grid,
+    .together,
+    .detail,
+    .steps,
+    .features {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-grid,
+    .together {
+        gap: 32px;
+    }
+
+    .section {
+        padding: 48px 0;
+    }
+
+    .profile {
+        grid-template-columns: 1fr;
+        justify-items: center;
+        text-align: center;
+        padding: 28px 20px;
+    }
+
+    .stats {
+        justify-content: center;
+    }
+
+    .form-card {
+        padding: 24px 20px;
+    }
+}
+
+/* если у человека отключены анимации — убираем плавные переходы */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+}

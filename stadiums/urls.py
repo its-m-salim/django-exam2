@@ -15,6 +15,6 @@ urlpatterns = [
     path("field_info/<int:id>/", field_info, name="field_info"),
     path('bookings/<int:id>/', booking_info, name='booking_info'),
     path('play-together/', play_together, name='play_together'),
-    # path('join_booking/<int:id>/', join_booking, name='join_booking'),
-    # path('leave_booking/<int:id>/', leave_booking, name='leave_booking'),
+    path('join_booking/<int:id>/', join_booking, name='join_booking'),
+    path('leave_booking/<int:id>/', leave_booking, name='leave_booking'),
 ]

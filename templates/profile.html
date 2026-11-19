@@ -1,19 +1,31 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block title %}{% endblock %}
-{% block css %}<link rel="stylesheet" href="{% static 'profile.css' %}">{% endblock %}
+
+{% block title %}Мой профиль{% endblock %}
 
 {% block content %}
+<section class="container page">
+    <div class="profile">
+        {% include 'includes/avatar.html' with person=user size='lg' %}
 
-{% if user.avatar %}
-<img src="{{user.avatar.url}}" alt="">
-{% endif %}
+        <div>
+            <h1>{{ user.username }}</h1>
+            <p class="page-sub">{{ user.email|default:"Email не указан" }}</p>
+            <p class="page-sub">{{ user.phone|default:"Телефон не указан" }}</p>
 
-<h1>{{user.username}}</h1>
-<h1>{{user.bio|default:"no bio"}}</h1>
-<h1>{{user.email|default:"no email"}}</h1>
-<h1>{{user.phone|default:"no phone"}}</h1>
-<p>orders {{ user.bookings.count }}</p>
+            <p class="profile-bio">{{ user.bio|default:"О себе пока ничего не написано." }}</p>
 
-<a href="/">home</a>
+            <div class="stats">
+                <div class="stat">
+                    <strong>{{ user.bookings.count }}</strong>
+                    <span>заказов</span>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a class="btn btn-green" href="{% url 'my_fields' %}">Мои поля</a>
+                <a class="btn btn-outline" href="{% url 'fields' %}">Каталог полей</a>
+            </div>
+        </div>
+    </div>
+</section>
 {% endblock %}

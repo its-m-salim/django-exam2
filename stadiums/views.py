@@ -209,3 +209,41 @@ def play_together(request):
 def profile(request):
     return render(request, "profile.html")
 
+
+@login_required
+def join_booking(request, id):
+    booking = get_object_or_404(Booking, pk =id, status = "active", has_team = False)
+
+    if request.method == 'POST':
+        if booking.user_id == request.user.id:
+            return redirect("play_together")
+
+        if Participant.objects.filter(booking=booking, user=request.user).exists():
+            return redirect("play_together")
+
+        if booking.players_needed is not None and booking.participants.count() >= booking.players_needed:
+            return redirect("play_together")
+
+        Participant.objects.create(
+            booking=booking,
+            user=request.user
+        )
+
+        return redirect("play_together")
+
+    return redirect("play_together")
+
+
+
+
+
+@login_required
+def leave_booking(request, id):
+    booking = get_object_or_404(Booking, pk=id)
+
+    if request.method == 'POST':
+        Participant.objects.filter(booking=booking, user=request.user).delete()
+
+        return redirect("play_together")
+
+    return redirect("play_together")

@@ -1,29 +1,64 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Аренда футбольных полей{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block css %}{% endblock %}
 </head>
 <body>
-    <header>
-        <nav>
-            <a href="{% url 'home' %}">Главная</a>
+
+<header class="site-header">
+    <div class="container header-row">
+        <a class="logo" href="{% url 'home' %}">
+            <span class="logo-ball" aria-hidden="true">⚽</span>
+            Футбольные поля
+        </a>
+
+        <nav class="nav" id="nav">
+            {# request.resolver_match.url_name — имя текущей страницы из urls.py #}
+            <a href="{% url 'home' %}" {% if request.resolver_match.url_name == 'home' %}class="active"{% endif %}>Главная</a>
+
             {% if user.is_authenticated %}
-                <a href="{% url 'fields' %}">fields</a>
-                <a href="{% url 'play_together' %}">play play-together</a>
-                <a href="{% url 'my_fields' %}">my fields</a>
-                <a href="{% url 'profile' %}">profilre</a>
-                <a href="{% url 'logout' %}">quit</a>
+                <a href="{% url 'fields' %}" {% if request.resolver_match.url_name == 'fields' %}class="active"{% endif %}>Поля</a>
+                <a href="{% url 'play_together' %}" {% if request.resolver_match.url_name == 'play_together' %}class="active"{% endif %}>Играем вместе</a>
+                <a href="{% url 'my_fields' %}" {% if request.resolver_match.url_name == 'my_fields' %}class="active"{% endif %}>Мои поля</a>
+                <a href="{% url 'logout' %}">Выйти</a>
+
+                {# Аватар справа вверху — ведёт в профиль #}
+                <a class="nav-profile {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" href="{% url 'profile' %}" title="Мой профиль">
+                    {% include 'includes/avatar.html' with person=user size='sm' %}
+                    <span>{{ user.username }}</span>
+                </a>
             {% else %}
-                <a href="{% url 'login' %}">login</a>
-                <a href="{% url 'registration' %}">register</a>
+                <a href="{% url 'login' %}" {% if request.resolver_match.url_name == 'login' %}class="active"{% endif %}>Войти</a>
+                <a class="nav-register" href="{% url 'registration' %}">Регистрация</a>
             {% endif %}
         </nav>
-    </header>
+    </div>
+</header>
 
-    <main>
-        {% block content %}{% endblock %}
-    </main>
+{# Сообщения пользователю (messages) #}
+{% if messages %}
+    <div class="container messages">
+        {% for message in messages %}
+            <div class="message message-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+    <div class="container footer-row">
+        <span>⚽ Аренда футбольных полей</span>
+        <span>Заказали поле — сыграли — завершили</span>
+    </div>
+</footer>
+
 </body>
 </html>

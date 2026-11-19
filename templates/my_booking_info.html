@@ -1,46 +1,70 @@
 {% extends 'base.html' %}
 
-{% block title %}Информация о заказе{% endblock %}
+{% block title %}Заказ №{{ booking.id }}{% endblock %}
 
 {% block content %}
-<h1>Заказ №{{ booking.id }}</h1>
-<h2>{{ booking.field.name }}</h2>
+<section class="container page">
+    <div class="page-head">
+        <div>
+            <h1 class="page-title">Заказ №{{ booking.id }}</h1>
+            <p class="page-sub">{{ booking.field.name }} · {{ booking.field.address }}</p>
+        </div>
+        <span class="badge badge-{{ booking.status }}">{{ booking.get_status_display }}</span>
+    </div>
 
-{% if booking.field.image %}
-    <img src="{{ booking.field.image.url }}" alt="Фото поля {{ booking.field.name }}">
+    <div class="detail">
+        <div>
+            {% if booking.field.image %}
+                <img class="detail-img" src="{{ booking.field.image.url }}" alt="Фото поля {{ booking.field.name }}">
+            {% else %}
+                <div class="detail-img-empty">Нет фото</div>
+            {% endif %}
 
-{% endif %}
+            {% if booking.field.description %}
+                <p class="description">{{ booking.field.description }}</p>
+            {% endif %}
+        </div>
 
+        <aside class="panel">
+            <dl class="info-list">
+                <div class="info-row"><dt>Формат</dt><dd>{{ booking.field.category.name }}</dd></div>
+                <div class="info-row"><dt>Игроков в команде</dt><dd>{{ booking.field.category.players_count }}</dd></div>
+                <div class="info-row"><dt>Цена за игру</dt><dd>{{ booking.field.price }}</dd></div>
+                <div class="info-row"><dt>Дата заказа</dt><dd>{{ booking.created_at|date:"d.m.Y H:i" }}</dd></div>
+                <div class="info-row"><dt>Команда</dt><dd>{% if booking.has_team %}Есть{% else %}Нет{% endif %}</dd></div>
+                {% if not booking.has_team %}
+                    <div class="info-row"><dt>Не хватает игроков</dt><dd>{{ booking.players_needed }}</dd></div>
+                {% endif %}
+            </dl>
 
-<p>adres{{ booking.field.address }}</p>
-<p>ct{{ booking.field.category.name }}</p>
-<p>players {{ booking.field.category.players_count }}</p>
-<p>price{{ booking.field.price }}</p>
-<p>caption{{ booking.field.description }}</p>
-<p>date ordered:{{ booking.created_at }}</p>
-<p>status {{ booking.get_status_display }}</p>
-<p>have team? {% if booking.has_team %}Да{% else %}Нет{% endif %}</p>
+            {% if not booking.has_team %}
+                <h2>Кто вступил</h2>
+                <div class="people">
+                    {% for participant in booking.participants.all %}
+                        <div class="person">
+                            {% include 'includes/avatar.html' with person=participant.user size='md' %}
+                            <span>{{ participant.user.username }}</span>
+                        </div>
+                    {% empty %}
+                        <p class="page-sub">Пока никто не вступил.</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-{% if not booking.has_team %}
-    <p>players need {{ booking.players_needed }}</p>
-    <h3>playesr</h3>
-    {% for participant in booking.participants.all %}
-        <p>{{ participant.user.username }}</p>
-    {% empty %}
-        <p>no players yet.</p>
-    {% endfor %}
-{% endif %}
-
-
-{% if booking.status == 'active' %}
-    <form method="post" action="{% url 'cancel_booking' booking.id %}">
-        {% csrf_token %}
-        <button type="submit">cancel</button>
-    </form>
-    <form method="post" action="{% url 'finish_booking' booking.id %}">
-        {% csrf_token %}
-        <button type="submit">finish</button>
-    </form>
-{% endif %}
-<a href="{% url 'my_fields' %}">back</a>
+            <div class="actions">
+                {% if booking.status == 'active' %}
+                    <form class="inline-form" method="post" action="{% url 'finish_booking' booking.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-green" type="submit">Завершить</button>
+                    </form>
+                    <form class="inline-form" method="post" action="{% url 'cancel_booking' booking.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" type="submit">Отменить</button>
+                    </form>
+                {% endif %}
+                <a class="btn btn-outline" href="{% url 'my_fields' %}">Назад</a>
+            </div>
+        </aside>
+    </div>
+</section>
 {% endblock %}

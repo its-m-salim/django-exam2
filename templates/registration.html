@@ -1,21 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Registration</h1>
-    <form action="" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="text" name="username" required placeholder="username">
-        <input type="text" name="password" required placeholder="password">
-        <input type="text" name="email" placeholder="email">
-        <textarea name="bio" id="" placeholder="bio"></textarea>
-        <input type="text" name="phone" maxlength="14" placeholder="phone">
-        <input type="file" name="avatar">
-        <button type="submit">register</button>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<section class="auth">
+    <div class="container">
+        <div class="form-card form-wide">
+            <h1>Регистрация</h1>
+            <p class="form-sub">Создайте аккаунт, чтобы заказывать поля и играть с другими.</p>
+
+            {# enctype нужен, чтобы загрузилась фотография #}
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-field">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-field">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <div class="form-field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email">
+                </div>
+                <div class="form-field">
+                    <label for="phone">Телефон <span class="form-hint">(необязательно)</span></label>
+                    <input type="text" id="phone" name="phone" maxlength="14">
+                </div>
+                <div class="form-field">
+                    <label for="bio">О себе <span class="form-hint">(необязательно)</span></label>
+                    <textarea id="bio" name="bio"></textarea>
+                </div>
+                <div class="form-field">
+                    <label for="avatar">Аватар <span class="form-hint">(необязательно)</span></label>
+                    <input type="file" id="avatar" name="avatar" accept="image/*">
+                    <span class="form-hint">Без фото будет серый круг с первой буквой имени.</span>
+                </div>
+                <button class="btn btn-green btn-block" type="submit">Создать аккаунт</button>
+            </form>
+
+            <p class="form-footer">Уже есть аккаунт? <a href="{% url 'login' %}">Войти</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}

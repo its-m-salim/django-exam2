@@ -1,19 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Login</h1>
-    <form action="" method="post">
-        {% csrf_token %}
-        <input type="text" name="username" placeholder="username">
-        <input type="text" name="password" placeholder="password">
-     
-        <button type="submit">Login</button>
-        <p>no account yet?<a href="/registration/">sign up</a></p>
-    </form>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Вход{% endblock %}
+
+{% block content %}
+<section class="auth">
+    <div class="container">
+        <div class="form-card">
+            <h1>Вход</h1>
+            <p class="form-sub">Войдите, чтобы заказать поле.</p>
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-field">
+                    <label for="username">Имя пользователя</label>
+                    <input type="text" id="username" name="username" required autofocus>
+                </div>
+                <div class="form-field">
+                    <label for="password">Пароль</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button class="btn btn-green btn-block" type="submit">Войти</button>
+            </form>
+
+            <p class="form-footer">Нет аккаунта? <a href="{% url 'registration' %}">Зарегистрироваться</a></p>
+        </div>
+    </div>
+</section>
+{% endblock %}

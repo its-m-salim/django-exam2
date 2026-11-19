@@ -3,7 +3,15 @@
 {% block title %}Подтверждение действия{% endblock %}
 
 {% block content %}
-<h1>Подтвердите действие</h1>
-<p>Вернитесь к своим заказам и используйте кнопку отмены или завершения.</p>
-<a href="{% url 'my_fields' %}">Мои заказы</a>
+<section class="auth">
+    <div class="container">
+        <div class="form-card">
+            <h1>Нужно подтверждение</h1>
+            <p class="form-sub">
+                Отменить или завершить заказ можно только кнопкой в разделе «Мои поля».
+            </p>
+            <a class="btn btn-green btn-block" href="{% url 'my_fields' %}">Перейти в «Мои поля»</a>
+        </div>
+    </div>
+</section>
 {% endblock %}

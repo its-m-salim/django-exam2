@@ -1,12 +1,143 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block title %}{% endblock %}
-{% block css %}<link rel="stylesheet" href="{% static 'movies.css' %}">{% endblock %}
+
+{% block title %}Аренда футбольных полей{% endblock %}
 
 {% block content %}
 
+<section class="hero">
+    <div class="container hero-grid">
+        <div>
+            <h1>Футбольное поле целиком — на вашу игру</h1>
+            <p class="lead">
+                Выберите поле и нажмите «Заказать» — оно ваше. Сыграли — нажали «Завершить»,
+                и поле снова свободно для других. Никаких часов и календарей.
+            </p>
+            <div class="hero-actions">
+                {% if user.is_authenticated %}
+                    <a class="btn btn-primary" href="{% url 'fields' %}">Смотреть поля</a>
+                    <a class="btn btn-outline-light" href="{% url 'play_together' %}">Играем вместе</a>
+                {% else %}
+                    <a class="btn btn-primary" href="{% url 'registration' %}">Зарегистрироваться</a>
+                    <a class="btn btn-outline-light" href="{% url 'login' %}">Войти</a>
+                {% endif %}
+            </div>
+        </div>
 
-<h1>hello {{user.username|default:"Gest"}}</h1>
+        <div class="formats">
+            <div class="format"><strong>11 на 11</strong><span>по 11 игроков в команде</span></div>
+            <div class="format"><strong>7 на 7</strong><span>по 7 игроков в команде</span></div>
+            <div class="format"><strong>5 на 5</strong><span>по 5 игроков в команде</span></div>
+        </div>
+    </div>
+</section>
 
+{# ===== Как заказать поле ===== #}
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">Как заказать поле</h2>
+        <p class="section-sub">Три шага от выбора поля до конца игры.</p>
+
+        <div class="steps">
+            <div class="step">
+                <span class="step-num">1</span>
+                <h3>Выберите поле</h3>
+                <p>Откройте каталог и отфильтруйте поля по формату: 11 на 11, 7 на 7 или 5 на 5. Можно найти поле по названию или адресу.</p>
+            </div>
+            <div class="step">
+                <span class="step-num">2</span>
+                <h3>Закажите его</h3>
+                <p>Нажмите «Заказать» и ответьте, есть ли у вас команда. Поле сразу получит статус «Занято».</p>
+            </div>
+            <div class="step">
+                <span class="step-num">3</span>
+                <h3>Сыграйте и завершите</h3>
+                <p>После игры нажмите «Завершить» в разделе «Мои поля» — поле снова станет свободным. Планы изменились? Нажмите «Отменить».</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ===== Играем вместе ===== #}
+<section class="section section-white">
+    <div class="container together">
+        <div>
+            <h2 class="section-title">Нет команды? Играйте вместе</h2>
+            <p>
+                Если вы заказываете поле без команды, укажите, сколько игроков не хватает.
+                Ваш заказ появится в разделе «Играем вместе», и другие пользователи смогут вступить.
+            </p>
+            <p>
+                Когда все места заняты, кнопка «Вступить» пропадает.
+                А если хотите просто сыграть — найдите чужой заказ и присоединяйтесь.
+            </p>
+            {% if user.is_authenticated %}
+                <a class="btn btn-green" href="{% url 'play_together' %}">Найти команду</a>
+            {% else %}
+                <a class="btn btn-green" href="{% url 'registration' %}">Создать аккаунт</a>
+            {% endif %}
+        </div>
+
+        {# Картинка-пример: как выглядит набор в команду #}
+        <div class="team-demo">
+            <h3>Не хватает игроков</h3>
+            <p>Так выглядит набор в команду</p>
+            <div class="team-slots">
+                <span class="avatar avatar-md">А</span>
+                <span class="avatar avatar-md">Б</span>
+                <span class="slot-empty"></span>
+                <span class="slot-empty"></span>
+                <span class="slot-empty"></span>
+            </div>
+            <span class="btn btn-primary btn-sm">Вступить в команду</span>
+        </div>
+    </div>
+</section>
+
+{# ===== Что внутри ===== #}
+<section class="section">
+    <div class="container">
+        <h2 class="section-title">Что есть на сайте</h2>
+        <p class="section-sub">Только самое нужное для аренды поля.</p>
+
+        <div class="features">
+            <div class="feature">
+                <h3>Поле целиком</h3>
+                <p>Вы заказываете всё поле сразу, без выбора часов. Состояние только одно: свободно или занято.</p>
+            </div>
+            <div class="feature">
+                <h3>Каталог с поиском</h3>
+                <p>Фото, цена и статус каждого поля. Фильтр по формату и поиск по названию или адресу работают вместе.</p>
+            </div>
+            <div class="feature">
+                <h3>Мои поля и история</h3>
+                <p>Активные заказы всегда под рукой, а завершённые и отменённые лежат в истории.</p>
+            </div>
+            <div class="feature">
+                <h3>Свой профиль</h3>
+                <p>Загрузите аватар, добавьте телефон и рассказ о себе — другие игроки увидят, с кем играют.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ===== Призыв в конце страницы ===== #}
+<section class="cta-band">
+    <div class="container">
+        {% if user.is_authenticated %}
+            <h2>Выберите поле для игры</h2>
+            <p>В каталоге уже есть свободные поля.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="{% url 'fields' %}">Открыть каталог</a>
+            </div>
+        {% else %}
+            <h2>Готовы сыграть?</h2>
+            <p>Создайте аккаунт за минуту и закажите первое поле.</p>
+            <div class="hero-actions">
+                <a class="btn btn-primary" href="{% url 'registration' %}">Зарегистрироваться</a>
+                <a class="btn btn-outline-light" href="{% url 'login' %}">Войти</a>
+            </div>
+        {% endif %}
+    </div>
+</section>
 
 {% endblock %}

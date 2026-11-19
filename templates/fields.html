@@ -1,43 +1,71 @@
 {% extends 'base.html' %}
 
+{% block title %}Каталог полей{% endblock %}
 
 {% block content %}
-<h1>Каталог футбольных полей</h1>
+<section class="container page">
+    <div class="page-head">
+        <div>
+            <h1 class="page-title">Каталог футбольных полей</h1>
+            <p class="page-sub">Найдено полей: {{ fields|length }}</p>
+        </div>
+    </div>
 
-<form method="get">
-    <input type="text" name="q" value="{{ q|default:'' }}" placeholder="search">
-    {% for cat in categories %}
-        <label>
-            <input type="checkbox" name="category" value="{{ cat.id }}" {% if cat.id|stringformat:"s" in q_category %}checked{% endif %}>
-            {{ cat.name }}
-        </label>
-    {% endfor %}
-    <button type="submit">search</button>
-</form>
+    {# Поиск и фильтр по формату (параметры q и category из views.py) #}
+    <form class="filters" method="get">
+        <input type="text" name="q" value="{{ q|default:'' }}" placeholder="Поиск по названию или адресу">
 
-{% for f in fields %}
-    <section>
-        {% if f.image %}
-            <img src="{{ f.image.url }}" alt="Фото поля {{ f.name }}">
-        {% endif %}
+        <div class="chips">
+            {% for cat in categories %}
+                <label class="chip">
+                    <input type="checkbox" name="category" value="{{ cat.id }}" {% if cat.id|stringformat:"s" in q_category %}checked{% endif %}>
+                    <span>{{ cat.name }}</span>
+                </label>
+            {% endfor %}
+        </div>
 
-        <h2><a href="{% url 'field_info' f.id %}">{{ f.name }}</a></h2>
-        <p>price: {{ f.price }}</p>
-        <p>adree: {{ f.address }}</p>
-        <p>ct: {{ f.category.name }}</p>
-        <p>players {{ f.category.players_count }}</p>
-        <p>{{ f.description|default:"no caption"}}</p>
-        
-        {% if f.is_available %}
-            <p>free</p>
-            <a href="{% url 'field_book' f.id %}">book this pole</a>
-        {% else %}
-            <p>booked</p>
-        {% endif %}
-    
-    </section>
-    <hr>
-{% empty %}
-    <p>no free fields yet </p>
-{% endfor %}
+        <button class="btn btn-green btn-sm" type="submit">Найти</button>
+        <a class="btn btn-outline btn-sm" href="{% url 'fields' %}">Сбросить</a>
+    </form>
+
+    <div class="cards">
+        {% for f in fields %}
+            <article class="card">
+                <div class="card-media">
+                    {% if f.image %}
+                        <img class="card-img" src="{{ f.image.url }}" alt="Фото поля {{ f.name }}">
+                    {% else %}
+                        <div class="card-img-empty">Нет фото</div>
+                    {% endif %}
+
+                    {# Статус поля #}
+                    {% if f.is_available %}
+                        <span class="badge badge-free">Свободно</span>
+                    {% else %}
+                        <span class="badge badge-busy">Занято</span>
+                    {% endif %}
+                </div>
+
+                <div class="card-body">
+                    <h2 class="card-title"><a href="{% url 'field_info' f.id %}">{{ f.name }}</a></h2>
+                    <div><span class="chip-info">{{ f.category.name }}</span></div>
+                    <p class="card-text">{{ f.address }}</p>
+
+                    <div class="card-foot">
+                        <span class="price">{{ f.price }} <small>за игру</small></span>
+                        {% if f.is_available %}
+                            <a class="btn btn-primary btn-sm" href="{% url 'field_book' f.id %}">Заказать</a>
+                        {% else %}
+                            <a class="btn btn-outline btn-sm" href="{% url 'field_info' f.id %}">Подробнее</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </article>
+        {% empty %}
+            <div class="empty" style="grid-column: 1 / -1;">
+                Ничего не найдено. Попробуйте изменить поиск или сбросить фильтры.
+            </div>
+        {% endfor %}
+    </div>
+</section>
 {% endblock %}

@@ -1,13 +1,12 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная страница</title>
-    <link rel="stylesheet" href="{% static 'home.css' %}">
-</head>
-<body>
-    <h1>Добро пожаловать!, {{request.user.username}}</h1>
-</body>
-</html>
+{% block title %}{% endblock %}
+{% block css %}<link rel="stylesheet" href="{% static 'movies.css' %}">{% endblock %}
+
+{% block content %}
+
+
+<h1>hello {{user.username|default:"Gest"}}</h1>
+
+
+{% endblock %}

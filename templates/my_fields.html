@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block css %}<link rel="stylesheet" href="{% static 'my_fields.css' %}">{% endblock %}
+
+{% block content %}
+
+<h1>my fields</h1>
+{% for f in active %}
+<div class="card">
+    <h1>{{f.name}}</h1>
+    <p>ordered at {{f.created_at}}</p>
+    {% if has_team %}
+    <p>full</p>
+    {% else %}
+    <p>need players {{f.players_needed}}</p>
+    <form action="{% url 'cancel_booking' f.id %}" method="post">
+    {% csrf_token %}
+        <button type="submit">cancel booking</button>t
+    </form>
+    <form action="{% url 'finish_booking' f.id %}" method="post">
+    {% csrf_token %}
+
+        <button type="submit">finish booking</button>
+    </form>
+    {% endif %}
+    {% empty %}
+    <p>you have not fields yet</p>
+</div>
+
+{% endfor %}
+{% endblock %}

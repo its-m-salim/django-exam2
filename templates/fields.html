@@ -1,13 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    {% for f in fieds %}
-    <div>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block css %}<link rel="stylesheet" href="{% static 'fields.css' %}">{% endblock %}
+
+{% block content %}
+<form action="" method="get">
+    <input type="text" name="q" placeholder="search">
+    {% for ct in categories %}
+    <input type="checkbox" name="category" value="{{ct.id}}">{{ct.name}}
+    {% endfor %}
+    <button type="submit">search</button>
+</form>
+
+    {% for f in fields %}
+    <div class="field-card">
+        <img src="{{f.image.url}}" alt="">
         <p>name {{f.name}}</p>
         <p>price {{f.price}}</p>
         <p>address {{f.address}}</p>
@@ -19,10 +26,11 @@
         <p>status: free </p>
         <a href="{% url 'field_book' f.id %}">book this field</a>
         {% else %}
+        <p>status: busy</p>
         {% endif %}
     </div>
     {% empty %}
     <h1>no fields yet.</h1>
     {% endfor %}
-</body>
-</html>
+
+{% endblock %}

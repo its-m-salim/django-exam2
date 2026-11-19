@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block css %}<link rel="stylesheet" href="{% static 'profile.css' %}">{% endblock %}
+
+{% block content %}
+
+{% if user.avatar %}
+<img src="{{user.avatar.url}}" alt="">
+{% endif %}
+
+<h1>{{user.username}}</h1>
+<h1>{{user.bio}}</h1>
+<h1>{{user.bio|default:"no bio"}}</h1>
+<h1>{{user.email|default:"no email"}}</h1>
+<h1>{{user.phone|default:"no phone"}}</h1>
+<a href="/">home</a>
+{% endblock %}

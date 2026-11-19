@@ -11,9 +11,9 @@
         {% csrf_token %}
         <input type="text" name="username" required placeholder="username">
         <input type="text" name="password" required placeholder="password">
-        <input type="text" name="eamail" placeholder="email">
+        <input type="text" name="email" placeholder="email">
         <textarea name="bio" id="" placeholder="bio"></textarea>
-        <input type="text" name="phone" max="14" placeholder="phone">
+        <input type="text" name="phone" maxlength="14" placeholder="phone">
         <input type="file" name="avatar">
         <button type="submit">register</button>
     </form>

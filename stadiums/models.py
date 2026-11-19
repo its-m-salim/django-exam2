@@ -25,7 +25,7 @@ class Field(models.Model):
     name = models.CharField(max_length=100)
     price = models.DecimalField(max_digits=8, decimal_places=2)
     address = models.CharField(max_length=100)
-    category = models.ForeignKey(Category, on_delete= models.CASCADE)
+    category = models.ForeignKey(Category, on_delete= models.CASCADE, related_name="fields")
     description = models.TextField()
     is_available = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -50,12 +50,14 @@ class Booking(models.Model):
     user = models.ForeignKey(User, on_delete= models.CASCADE, related_name="bookings")
     field = models.ForeignKey(Field, on_delete= models.CASCADE, related_name="bookings")
     has_team = models.BooleanField(default=False)
-    players_needed = models.PositiveIntegerField()
+    players_needed = models.PositiveIntegerField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=50, choices=booking_statuses, default="active")
 
 
 class Participant(models.Model):
-    booking = models.ForeignKey(Booking, on_delete=models.CASCADE)
+    booking = models.ForeignKey(Booking, on_delete=models.CASCADE, related_name="participants")
     user = models.ForeignKey(User, on_delete= models.CASCADE)
     joined_at = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        unique_together = ("booking", "user")

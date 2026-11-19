@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Играем вместе{% endblock %}
+
+{% block content %}
+<h1>Играем вместе</h1>
+
+
+{% for booking in bookings %}
+
+    <section>
+        <h2>{{ booking.field.name }}</h2>
+        <p>adres: {{ booking.field.address }}</p>
+        <p>owner: {{ booking.user.username }}</p>
+        <p> players_needed{{ booking.players_needed }}</p>
+        <h3>players</h3>
+
+
+        {% for participant in booking.participants.all %}
+            <p>{{ participant.user.username }}</p>
+        {% empty %}
+            <p>no players yet</p>
+        {% endfor %}
+
+        {% if booking.user_id != user.id %}
+            {% for participant in booking.participants.all %}
+                {% if participant.user_id == user.id %}
+                    <form method="post" action="{% url 'leave_booking' booking.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Выйти из команды</button>
+                    </form>
+                {% endif %}
+            {% endfor %}
+
+            {% if booking.participants.count < booking.players_needed %}
+                <form method="post" action="{% url 'join_booking' booking.id %}">
+                {% csrf_token %}
+                <button type="submit">join team</button>
+            </form>
+            {% endif %}
+        {% endif %}
+    </section>
+    <hr>
+{% empty %}
+    <p>no active commands.</p>
+{% endfor %}
+{% endblock %}

@@ -1,18 +1,21 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block title %}{% endblock %}
-{% block css %}<link rel="stylesheet" href="{% static 'book_field.css' %}">{% endblock %}
-{% block content %}
 
-<form action="" method="post">
+{% block title %}Заказ поля{% endblock %}
+
+{% block content %}
+<h1>Заказать поле</h1>
+<form method="post">
     {% csrf_token %}
-    <h1>do you have team?</h1>
-    <select name="has_team" id="">
-        <option value="True">yes i have</option>
-        <option value="False">no i dont</option>
-    </select>
-    <input type="number" name="players_needed" max="22" placeholder="how many players do you need?">
+    <p><label>have team?
+        <select name="has_team" required>
+            <option value="True">yes</option>
+            <option value="False">no</option>
+        </select>
+    </label></p>
+    <p><label>players needed
+        <input type="number" name="players_needed" min="0" max="22" value="0">
+    </label></p>
     <button type="submit">save</button>
 </form>
-<a href="/fields">back</a>
+<a href="{% url 'fields' %}">back</a>
 {% endblock %}

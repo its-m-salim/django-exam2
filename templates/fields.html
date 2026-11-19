@@ -1,36 +1,43 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block title %}{% endblock %}
-{% block css %}<link rel="stylesheet" href="{% static 'fields.css' %}">{% endblock %}
+
 
 {% block content %}
-<form action="" method="get">
-    <input type="text" name="q" placeholder="search">
-    {% for ct in categories %}
-    <input type="checkbox" name="category" value="{{ct.id}}">{{ct.name}}
+<h1>Каталог футбольных полей</h1>
+
+<form method="get">
+    <input type="text" name="q" value="{{ q|default:'' }}" placeholder="search">
+    {% for cat in categories %}
+        <label>
+            <input type="checkbox" name="category" value="{{ cat.id }}" {% if cat.id|stringformat:"s" in q_category %}checked{% endif %}>
+            {{ cat.name }}
+        </label>
     {% endfor %}
     <button type="submit">search</button>
 </form>
 
-    {% for f in fields %}
-    <div class="field-card">
-        <img src="{{f.image.url}}" alt="">
-        <p>name {{f.name}}</p>
-        <p>price {{f.price}}</p>
-        <p>address {{f.address}}</p>
-        <p>category {{f.category.name}}</p>
-        <p>players_count {{f.category.players_count}}</p>
-        <p>caption {{f.description|default:"no caption"}}</p>
+{% for f in fields %}
+    <section>
+        {% if f.image %}
+            <img src="{{ f.image.url }}" alt="Фото поля {{ f.name }}">
+        {% endif %}
+
+        <h2><a href="{% url 'field_info' f.id %}">{{ f.name }}</a></h2>
+        <p>price: {{ f.price }}</p>
+        <p>adree: {{ f.address }}</p>
+        <p>ct: {{ f.category.name }}</p>
+        <p>players {{ f.category.players_count }}</p>
+        <p>{{ f.description|default:"no caption"}}</p>
         
         {% if f.is_available %}
-        <p>status: free </p>
-        <a href="{% url 'field_book' f.id %}">book this field</a>
+            <p>free</p>
+            <a href="{% url 'field_book' f.id %}">book this pole</a>
         {% else %}
-        <p>status: busy</p>
+            <p>booked</p>
         {% endif %}
-    </div>
-    {% empty %}
-    <h1>no fields yet.</h1>
-    {% endfor %}
-
+    
+    </section>
+    <hr>
+{% empty %}
+    <p>no free fields yet </p>
+{% endfor %}
 {% endblock %}

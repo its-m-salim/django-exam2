@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ field.name }}{% endblock %}
+
+{% block content %}
+
+<h1>{{ field.name }}</h1>
+
+{% if field.image %}
+    <img src="{{ field.image.url }}" alt="Фото поля {{ field.name }}">
+
+{% endif %}
+
+
+<p>adres: {{ field.address }}</p>
+<p>ct: {{ field.category.name }}</p>
+<p>playesr {{ field.category.players_count }}</p>
+<p>price: {{ field.price }}</p>
+<p>caption: {{ field.description }}</p>
+
+{% if field.is_available %}
+
+    <p>status free</p>
+    <a href="{% url 'field_book' field.id %}">book this field</a>
+
+{% else %}
+    <p>booked</p>
+{% endif %}
+
+<a href="{% url 'fields' %}">back</a>
+{% endblock %}

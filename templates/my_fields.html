@@ -1,32 +1,51 @@
 {% extends 'base.html' %}
-{% load static %}
-{% block title %}{% endblock %}
-{% block css %}<link rel="stylesheet" href="{% static 'my_fields.css' %}">{% endblock %}
+
+{% block title %}Мои заказы{% endblock %}
 
 {% block content %}
 
-<h1>my fields</h1>
-{% for f in active %}
-<div class="card">
-    <h1>{{f.name}}</h1>
-    <p>ordered at {{f.created_at}}</p>
-    {% if has_team %}
-    <p>full</p>
-    {% else %}
-    <p>need players {{f.players_needed}}</p>
-    <form action="{% url 'cancel_booking' f.id %}" method="post">
-    {% csrf_token %}
-        <button type="submit">cancel booking</button>t
-    </form>
-    <form action="{% url 'finish_booking' f.id %}" method="post">
-    {% csrf_token %}
 
-        <button type="submit">finish booking</button>
-    </form>
-    {% endif %}
-    {% empty %}
-    <p>you have not fields yet</p>
-</div>
+<h1>my fiekds</h1>
+<h2>actives </h2>
+{% for booking in active %}
+    <section>
+        <h3>{{booking.field.name}}</h3>
+        <p>adrse: {{booking.field.address}}</p>
+        <p>date {{ booking.created_at }}</p>
+        <p>have tam {% if booking.has_team %}Да{% else %}Нет{% endif %}</p>
+        {% if not booking.has_team %}
+            <p>Не хватает игроков: {{ booking.players_needed }}</p>
+        {% endif %}
+        <p>Статус: {{ booking.get_status_display }}</p>
+        <a href="/bookings/{{ booking.id }}/">see details</a>
+        
+        <form method="post" action="{% url 'cancel_booking' booking.id %}">
+            {% csrf_token %}
+            <button type="submit">cancel </button>
+        </form>
 
+
+        <form method="post" action="{% url 'finish_booking' booking.id %}">
+            {% csrf_token %}
+            <button type="submit">finish</button>
+        
+        </form>
+    </section>
+    <hr>
+{% empty %}
+    <p>no fields yet.</p>
+{% endfor %}
+
+<h2>history</h2>
+{% for booking in history %}
+    <section>
+        <h3>{{ booking.field.name }}</h3>
+        <p>date{{ booking.created_at }}</p>
+        <p>status{{ booking.get_status_display }}</p>
+        <a href="/bookings/{{ booking.id }}/">see</a>
+    </section>
+    <hr>
+{% empty %}
+    <p>history</p>
 {% endfor %}
 {% endblock %}

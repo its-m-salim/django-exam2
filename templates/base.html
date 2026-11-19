@@ -1,30 +1,29 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Онлайн синема{% endblock %}</title>
-
-    <link rel="stylesheet" href="{% static 'base.css' %}">
-    {% block css %}{% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Аренда футбольных полей{% endblock %}</title>
 </head>
 <body>
     <header>
-        {% if user.is_authenticated %}
-        <a href="/">Главная</a>
-        <a href="/fields/">Поля</a>
-        <a href="/play-together/">Играем вместе</a>
-        <a href="/my_fields/">Мои поля</a>
-        <a href="/profile/">Профиль</a>
-        <a href="/logout">выход</a>
-        {% else %}
-        <a href="/">Главная</a>
-        <a href="/login/">Вход</a>
-        <a href="/register/">Регистрация</a>
-        {% endif %}
+        <nav>
+            <a href="{% url 'home' %}">Главная</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'fields' %}">fields</a>
+                <a href="{% url 'play_together' %}">play play-together</a>
+                <a href="{% url 'my_fields' %}">my fields</a>
+                <a href="{% url 'profile' %}">profilre</a>
+                <a href="{% url 'logout' %}">quit</a>
+            {% else %}
+                <a href="{% url 'login' %}">login</a>
+                <a href="{% url 'registration' %}">register</a>
+            {% endif %}
+        </nav>
     </header>
-    <div class="content">
+
+    <main>
         {% block content %}{% endblock %}
-    </div>
+    </main>
 </body>
 </html>

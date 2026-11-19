@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Информация о заказе{% endblock %}
+
+{% block content %}
+
+<h1>Заказ №{{ booking.id }}</h1>
+<h2>{{ booking.field.name }}</h2>
+
+
+{% if booking.field.image %}
+    <img src="{{ booking.field.image.url }}" alt="Фото поля {{ booking.field.name }}">
+{% endif %}
+    <p>adree{{ booking.field.address }}</p>
+    <p>categoruy{{ booking.field.category.name }}</p>
+    <p>players{{ booking.field.category.players_count }}</p>
+    <p>price {{ booking.field.price }}</p>
+    <p>caption  {{ booking.field.description }}</p>
+    <p>date{{ booking.created_at }}</p>
+    <p>status{{ booking.get_status_display }}</p>
+    <p>have team?{% if booking.has_team %}yes{% else %}no{% endif %}</p>
+
+
+{% if not booking.has_team %}
+    <p>players needed {{ booking.players_needed }}</p>
+    <h3>players</h3>
+    {% for participant in booking.participants.all %}
+        <p>{{ participant.user.username }}</p>
+    {% empty %}
+        <p>no playesr yet</p>
+    {% endfor %}
+{% endif %}
+
+{% if booking.status == 'active' %}
+    <form method="post" action="{% url 'cancel_booking' booking.id %}">
+        {% csrf_token %}
+        <button type="submit">cancel</button>
+    </form>
+    <form method="post" action="{% url 'finish_booking' booking.id %}">
+        {% csrf_token %}
+        <button type="submit">finish</button>
+    </form>
+{% endif %}
+<a href="{% url 'my_fields' %}">Нback </a>
+{% endblock %}

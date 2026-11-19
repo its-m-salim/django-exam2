@@ -10,9 +10,10 @@
 {% endif %}
 
 <h1>{{user.username}}</h1>
-<h1>{{user.bio}}</h1>
 <h1>{{user.bio|default:"no bio"}}</h1>
 <h1>{{user.email|default:"no email"}}</h1>
 <h1>{{user.phone|default:"no phone"}}</h1>
+<p>orders {{ user.bookings.count }}</p>
+
 <a href="/">home</a>
 {% endblock %}

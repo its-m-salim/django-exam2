@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from .models import *
-from django.db.models import Q
+from django.db.models import Q, Count
 
 
 
@@ -58,7 +58,6 @@ def logout_user(request):
     return redirect("login")
 
 
-
 @login_required
 def show_fields(request):
 
@@ -69,7 +68,7 @@ def show_fields(request):
     category = request.GET.getlist("category")
 
     if q:
-        fields.filter(
+        fields = fields.filter(
             Q(name__icontains = q) | Q(address__icontains = q)
         )
     if category:
@@ -96,20 +95,24 @@ def book_field(request, id):
         return redirect("fields") 
 
 
-    has_team = request.POST.get('has_team')
-
-    if has_team not in ("True", "False"):
-        return redirect("field_book", id=id)
-
     
-    if has_team == "True":
-    
-        players_needed = 0
-
     
 
     if request.method == 'POST':
         data = request.POST
+        data = request.POST
+        has_team = data.get('has_team')
+
+        if has_team not in ("True", "False"):
+            return redirect("field_book", id=id)
+
+        has_team = (has_team == "True")
+
+        if has_team:
+            players_needed = 0
+        else:
+            raw_needed = data.get('players_needed')
+            players_needed = int(raw_needed) 
         Booking.objects.create(
             user = request.user,
             field = field,
@@ -191,13 +194,18 @@ def finish_booking(request, id):
 
 
 
+@login_required
+def play_together(request):
+    active_bookings = Booking.objects.filter(
+        status="active",
+        has_team=False
+    )
 
-# @login_required
-# def play_together(request):
+    return render(request, "play_together.html", {"bookings": active_bookings})
 
-#     active_bookings = Booking.objects.filter(status = "active", has_team = False).select_related()
 
 
 @login_required
 def profile(request):
     return render(request, "profile.html")
+
